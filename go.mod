@@ -1,4 +1,4 @@
-module product-app
+module react-golang-auth
 
 go 1.21
 
