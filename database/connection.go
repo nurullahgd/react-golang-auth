@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var db *gorm.DB
+var DB *gorm.DB
 
 func Connect() {
 	// Upload .env file
@@ -35,15 +35,20 @@ func Connect() {
 	if err != nil {
 		log.Fatal("Veritabanı bağlantısı başarısız:", err)
 	}
+	
+	DB = db
+
 	db.AutoMigrate(&models.User{})
 
-	sqlDB, err := db.DB()
-	if err != nil {
-		log.Fatal("Veritabanı bağlantısı başarısız:", err)
-	}
-	defer func() {
-		if err := sqlDB.Close(); err != nil {
-			log.Fatal("Veritabanı bağlantısını kapatırken hata:", err)
-		}
-	}()
+	// sqlDB, err := db.DB()
+	// if err != nil {
+	// 	log.Fatal("Veritabanı bağlantısı başarısız:", err)
+	// }
+
+	// defer func() {
+	// 	if err := sqlDB.Close(); err != nil {
+	// 		log.Fatal("Veritabanı bağlantısını kapatırken hata:", err)
+	// 	}
+	// }()
+
 }
