@@ -1,19 +1,44 @@
-import React from 'react';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import Login from "./pages/login";
+import Register from "./pages/register";
+import Home from "./pages/home";
+
+import Nav from "./components/Nav";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
+  const [name, setName] = useState("");
+  useEffect(() => {
+    (
+      async () => {
+        const response = await fetch("http://localhost:8000/api/user", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 200) {
+          const data = await response.json();
+          setName(data.name);
+        }
+      }
+    )();
+  });
   return (
     <div className="App">
-      <main className="form-signin w-100 m-auto"> <form>
-        <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
-        <div className="form-floating">
-          <input type="email" className="form-control" placeholder="name@example.com" />
-          <label htmlFor="floatingInput">Email address</label> </div> <div className="form-floating">
-          <input type="password" className="form-control" placeholder="Password" />
-          <label htmlFor="floatingPassword">Password</label> </div> <div className="form-check text-start my-3">
-        </div>
-        <button className="btn btn-primary w-100 py-2" type="submit">Sign in</button>
-        <p className="mt-5 mb-3 text-body-secondary">© 2017–2025</p> </form> </main>
+      <BrowserRouter>
+        <Nav name={name} setName={setName} />
+
+        <main className="form-signin w-100 m-auto">
+          <Routes>
+            <Route path="/" element={<Home name={name} />} />
+            <Route path="/login" element={<Login setName={setName} />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </main>
+      </BrowserRouter>
     </div>
   );
 }

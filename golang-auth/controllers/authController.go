@@ -106,7 +106,11 @@ func User(c fiber.Ctx) error {
 
 	database.DB.Where("email=?", (*claims)["email"]).First(&user)
 
-	return c.JSON(claims)
+	return c.JSON(fiber.Map{
+		"id":    user.Id,
+		"name":  user.Name,
+		"email": user.Email,
+	})
 
 }
 
